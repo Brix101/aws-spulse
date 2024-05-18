@@ -5,9 +5,22 @@ import express from "express";
 import { createContext, publicProcedure, t } from "./trpc";
 import { z } from "zod";
 
+let count = 0;
+
 export const appRouter = t.router({
   hello: publicProcedure.input(z.string().optional()).query((opts) => {
     return { message: `Hello ${opts.input ?? "World"}` };
+  }),
+  count: publicProcedure.query(() => {
+    return count;
+  }),
+  add: publicProcedure.mutation(() => {
+    count++;
+    return count;
+  }),
+  minus: publicProcedure.mutation(() => {
+    count--;
+    return count;
   }),
 });
 
