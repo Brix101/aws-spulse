@@ -2,42 +2,26 @@ name: 'aws-spulse'
 # version: '3.9'
 
 services:
-  # caddy:
-  #   image: caddy:latest
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./Caddyfile:/etc/caddy/Caddyfile
-  #     - caddy_data:/data
-  #     - caddy_config:/config
-  #
-  # api:
-  #   image: api:latest
-  #   depends_on:
-  #     - clickhouse
-  #     - kafka
-  #     - postgres
-  #   environment:
-  #     - VIRTUAL_HOST=$DOMAIN
-  #     - VIRTUAL_PORT=3000
-  #
-  # web:
-  #   image: web:latest
-  #   environment:
-  #     - VIRTUAL_HOST=$DOMAIN
-  #     - VIRTUAL_PORT=3000
-
-  postgres:
+  db:
     image: postgres
     restart: always
     environment:
-      POSTGRES_DB: aws-spulse
-      POSTGRES_USER: pulse
-      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aws_spulse
+    ports:
+      - "5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 
 volumes:
-  postgres-data:
-
+  database:
+    driver: local
+  cache:
+    driver: local

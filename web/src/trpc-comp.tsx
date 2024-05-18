@@ -1,12 +1,11 @@
 import { trpc } from "./utils/trpc";
 
 export function TrpcComp() {
-  const nameQuery = trpc.hello.useQuery("Brix");
+  const { data, isLoading } = trpc.getMe.useQuery();
 
   return (
     <>
-      trpc
-      <p>{nameQuery.data?.message}</p>
+      {isLoading ? <p>Loading</p> : <p>Hello {data?.user?.name ?? "World"}</p>}
     </>
   );
 }

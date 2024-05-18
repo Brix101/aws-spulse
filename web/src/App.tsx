@@ -1,45 +1,62 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { TrpcComp } from "./trpc-comp";
-import { trpc } from "./utils/trpc";
+import "@/assets/css/index.css";
+
+import { trpc } from "@/utils/trpc";
+import { Button } from "./components/ui/button";
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 
 function App() {
-  const count = trpc.count.useQuery();
+  const queryClient = useQueryClient();
 
-  const add = trpc.add.useMutation({
-    onMutate: () => count.refetch(),
+  const { data, isLoading, isFetching } = trpc.getMe.useQuery();
+  const userKey = getQueryKey(trpc.getMe);
+
+  const user = data?.user;
+  const login = trpc.login.useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: userKey,
+      });
+    },
   });
-  const minus = trpc.minus.useMutation({
-    onMutate: () => count.refetch(),
+
+  const logout = trpc.logout.useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: userKey,
+      });
+    },
   });
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+    <div className="h-screen w-screen flex flex-col items-center justify-center">
+      {isLoading || isFetching ? (
+        <p>Loading</p>
+      ) : (
+        <p>Hello {user?.name ?? "World"}</p>
+      )}
 
       <div>
-        <button className="card" onClick={() => add.mutate()}>
-          add
-        </button>
-        <div className="card">{count.data}</div>
-        <button className="card" onClick={() => minus.mutate()}>
-          minus
-        </button>
+        {!user ? (
+          <Button
+            disabled={login.isLoading}
+            onClick={() =>
+              login.mutate({
+                // name: "Brix",
+                email: "brixterporras@gmail.com",
+                password: "password",
+              })
+            }
+          >
+            Login
+          </Button>
+        ) : (
+          <Button disabled={logout.isLoading} onClick={() => logout.mutate({})}>
+            Logout
+          </Button>
+        )}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <TrpcComp />
-    </>
+    </div>
   );
 }
 

@@ -2,26 +2,17 @@ import * as trpcExpress from "@trpc/server/adapters/express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
-import { createContext, publicProcedure, t } from "./trpc";
-import { z } from "zod";
-
-let count = 0;
+import { getMe } from "./routes/users/getMe";
+import { login } from "./routes/users/login";
+import { logout } from "./routes/users/logout";
+import { register } from "./routes/users/register";
+import { createContext, t } from "./trpc";
 
 export const appRouter = t.router({
-  hello: publicProcedure.input(z.string().optional()).query((opts) => {
-    return { message: `Hello ${opts.input ?? "World"}` };
-  }),
-  count: publicProcedure.query(() => {
-    return count;
-  }),
-  add: publicProcedure.mutation(() => {
-    count++;
-    return count;
-  }),
-  minus: publicProcedure.mutation(() => {
-    count--;
-    return count;
-  }),
+  login,
+  register,
+  getMe,
+  logout,
 });
 
 export const app = express();
