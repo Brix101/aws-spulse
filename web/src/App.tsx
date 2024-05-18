@@ -39,7 +39,7 @@ function App() {
       <div>
         {!user ? (
           <Button
-            disabled={login.isLoading}
+            disabled={login.isPending}
             onClick={() =>
               login.mutate({
                 // name: "Brix",
@@ -51,7 +51,7 @@ function App() {
             Login
           </Button>
         ) : (
-          <Button disabled={logout.isLoading} onClick={() => logout.mutate({})}>
+          <Button disabled={logout.isPending} onClick={() => logout.mutate({})}>
             Logout
           </Button>
         )}

@@ -24,7 +24,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@trpc/server": "^10.45.2",
+    "@trpc/server": "11.0.0-rc.373",
     "@types/node": "^20.12.12",
     "argon2": "^0.40.1",
     "cookie-parser": "^1.4.6",
