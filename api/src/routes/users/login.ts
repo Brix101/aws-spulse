@@ -5,7 +5,6 @@ import argon2d from "argon2";
 import { publicProcedure } from "../../trpc";
 import { sendAuthCookies } from "../../utils/auth-token";
 import { users } from "../../schema/users";
-import { db } from "../../db";
 
 export const login = publicProcedure
   .input(
@@ -15,7 +14,7 @@ export const login = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const user = await db.query.users.findFirst({
+    const user = await ctx.db.query.users.findFirst({
       where: eq(users.email, input.email.toString()),
     });
 

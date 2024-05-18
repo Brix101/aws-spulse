@@ -4,7 +4,6 @@ import { z } from "zod";
 import { sendAuthCookies } from "../../utils/auth-token";
 import { users } from "../../schema/users";
 import { publicProcedure } from "../../trpc";
-import { db } from "../../db";
 
 export const register = publicProcedure
   .input(
@@ -17,7 +16,7 @@ export const register = publicProcedure
   .mutation(async ({ ctx, input }) => {
     try {
       const newUser = (
-        await db
+        await ctx.db
           .insert(users)
           .values({
             name: input.name,

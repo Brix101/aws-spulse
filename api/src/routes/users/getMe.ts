@@ -1,8 +1,7 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../db";
+import { users } from "../../schema/users";
 import { publicProcedure } from "../../trpc";
 import { checkTokens } from "../../utils/auth-token";
-import { users } from "../../schema/users";
 
 export const getMe = publicProcedure.query(async ({ ctx }) => {
   const { id, rid } = ctx.req.cookies;
@@ -14,7 +13,7 @@ export const getMe = publicProcedure.query(async ({ ctx }) => {
       return { user: maybeUser };
     }
 
-    const user = await db.query.users.findFirst({
+    const user = await ctx.db.query.users.findFirst({
       where: eq(users.id, userId),
     });
 

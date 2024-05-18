@@ -2,29 +2,22 @@ import "@/assets/css/index.css";
 
 import { trpc } from "@/utils/trpc";
 import { Button } from "./components/ui/button";
-import { useQueryClient } from "@tanstack/react-query";
-import { getQueryKey } from "@trpc/react-query";
 
 function App() {
-  const queryClient = useQueryClient();
+  const utils = trpc.useUtils();
 
-  const { data, isLoading, isFetching } = trpc.getMe.useQuery();
-  const userKey = getQueryKey(trpc.getMe);
+  const { data, isLoading, isFetching } = trpc.user.getMe.useQuery();
 
   const user = data?.user;
-  const login = trpc.login.useMutation({
+  const login = trpc.user.login.useMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: userKey,
-      });
+      utils.user.getMe.invalidate();
     },
   });
 
-  const logout = trpc.logout.useMutation({
+  const logout = trpc.user.logout.useMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: userKey,
-      });
+      utils.user.getMe.invalidate();
     },
   });
 

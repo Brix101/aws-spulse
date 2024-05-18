@@ -1,15 +1,20 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { checkTokens, sendAuthCookies } from "./utils/auth-token";
+import { db } from "./db";
 
 export const createContext = ({
   req,
   res,
-}: trpcExpress.CreateExpressContextOptions) => ({ req, res, userId: "" });
+}: trpcExpress.CreateExpressContextOptions) => {
+  return { req, res, db, userId: "" };
+};
 
-type Context = Awaited<ReturnType<typeof createContext>> & { userId: string };
+type Context = Awaited<ReturnType<typeof createContext>>;
 
 export const t = initTRPC.context<Context>().create();
+
+export const router = t.router;
 export const publicProcedure = t.procedure;
 export const protectProcedure = t.procedure.use(async (opts) => {
   const { ctx } = opts;
