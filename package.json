@@ -1,0 +1,21 @@
+{
+  "name": "aws-spulse",
+  "version": "1.0.0",
+  "description": "",
+  "workspaces": [
+    "api",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter @aws-spulse/api run dev\" \"pnpm --filter @aws-spulse/web run dev\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "prettier": "^3.2.5"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
