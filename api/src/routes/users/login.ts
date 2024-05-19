@@ -2,9 +2,9 @@ import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import argon2d from "argon2";
-import { publicProcedure } from "../../trpc";
-import { sendAuthCookies } from "../../utils/auth-token";
-import { users } from "../../schema/users";
+import { publicProcedure } from "@/trpc";
+import { users } from "@/schema/users";
+import { sendAuthCookies } from "@/utils/auth-token";
 
 export const login = publicProcedure
   .input(

@@ -2,6 +2,10 @@ import path from "path";
 import { app } from "./appRouter";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { db } from "./db";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const startServer = async () => {
   console.log("about to migrate postgres");

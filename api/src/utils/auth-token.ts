@@ -1,4 +1,4 @@
-import { sign, verify } from "jsonwebtoken";
+import * as jsonwebtoken from "jsonwebtoken";
 import { Response } from "express";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
@@ -17,14 +17,14 @@ export type AccessTokenPayload = {
 const createAuthTokens = (
   user: User,
 ): { refreshToken: string; accessToken: string } => {
-  const refreshToken = sign(
+  const refreshToken = jsonwebtoken.sign(
     { userId: user.id, refreshTokenVersion: user.refreshTokenVersion },
     "process.env.REFRESH_TOKEN_SECRET",
     {
       expiresIn: "30d",
     },
   );
-  const accessToken = sign(
+  const accessToken = jsonwebtoken.sign(
     { userId: user.id },
     "process.env.ACCESS_TOKEN_SECRET",
     {
@@ -60,7 +60,7 @@ export const checkTokens = async (
 ) => {
   try {
     const data = <AccessTokenPayload>(
-      verify(accessToken, "process.env.ACCESS_TOKEN_SECRET")
+      jsonwebtoken.verify(accessToken, "process.env.ACCESS_TOKEN_SECRET")
     );
     return {
       userId: data.userId,
@@ -74,7 +74,7 @@ export const checkTokens = async (
   let data;
   try {
     data = <RefreshTokenPayload>(
-      verify(refreshToken, "process.env.REFRESH_TOKEN_SECRET")
+      jsonwebtoken.verify(refreshToken, "process.env.REFRESH_TOKEN_SECRET")
     );
   } catch {
     throw new TRPCError({ code: "UNAUTHORIZED" });

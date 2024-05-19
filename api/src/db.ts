@@ -1,10 +1,10 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import pg from "pg";
 import { users } from "./schema/users";
 
 //"postgresql://postgres:postgres@localhost/aws_spulse?schema=public&connection_limit=1&pool_timeout=1",
 
-const pool = new Pool({
+const pool = new pg.Pool({
   host: "localhost",
   port: 5432,
   user: "postgres",

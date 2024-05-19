@@ -1,9 +1,9 @@
+import { users } from "@/schema/users";
+import { publicProcedure } from "@/trpc";
+import { sendAuthCookies } from "@/utils/auth-token";
 import { TRPCError } from "@trpc/server";
 import argon2 from "argon2";
 import { z } from "zod";
-import { sendAuthCookies } from "../../utils/auth-token";
-import { users } from "../../schema/users";
-import { publicProcedure } from "../../trpc";
 
 export const register = publicProcedure
   .input(

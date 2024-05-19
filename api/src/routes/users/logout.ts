@@ -1,10 +1,10 @@
+import { publicProcedure } from "@/trpc";
+import { clearAuthCookies } from "@/utils/auth-token";
 import { z } from "zod";
-import { publicProcedure } from "../../trpc";
-import { clearAuthCookies } from "../../utils/auth-token";
 
 export const logout = publicProcedure
   .input(z.object({}))
-  .mutation(async ({ input, ctx }) => {
+  .mutation(async ({ ctx }) => {
     clearAuthCookies(ctx.res);
 
     return {
