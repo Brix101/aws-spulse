@@ -1,7 +1,7 @@
-import { users } from "@/schema/users";
-import { publicProcedure } from "@/trpc";
-import { checkTokens } from "@/utils/auth-token";
 import { eq } from "drizzle-orm";
+import { users } from "src/schema/users";
+import { publicProcedure } from "src/trpc";
+import { checkTokens } from "src/utils/auth-token";
 
 export const getMe = publicProcedure.query(async ({ ctx }) => {
   const { id, rid } = ctx.req.cookies;

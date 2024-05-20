@@ -2,7 +2,6 @@
   "name": "@aws-spulse/api",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.ts",
   "types": "src/api-type.ts",
   "scripts": {
@@ -15,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@trpc/server": "11.0.0-rc.373",
+    "@trpc/server": "10.45.2",
     "@types/node": "^20.12.12",
     "argon2": "^0.40.1",
     "cookie-parser": "^1.4.6",

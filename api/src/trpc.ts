@@ -2,7 +2,6 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { checkTokens, sendAuthCookies } from "./utils/auth-token";
 import { db } from "./db";
-import superjson from "superjson";
 
 export const createContext = ({
   req,
@@ -13,9 +12,7 @@ export const createContext = ({
 
 type Context = Awaited<ReturnType<typeof createContext>>;
 
-export const t = initTRPC.context<Context>().create({
-  transformer: superjson,
-});
+export const t = initTRPC.context<Context>().create();
 
 export const router = t.router;
 export const publicProcedure = t.procedure;

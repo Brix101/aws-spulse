@@ -1,4 +1,4 @@
-import * as jsonwebtoken from "jsonwebtoken";
+import jsonwebtoken from "jsonwebtoken";
 import { Response } from "express";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
