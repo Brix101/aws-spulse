@@ -10,8 +10,8 @@ function App() {
 
   const user = data?.user;
   const login = trpc.user.login.useMutation({
-    onSuccess: () => {
-      utils.user.getMe.invalidate();
+    onSuccess: (data) => {
+      utils.user.getMe.setData(undefined, data);
     },
   });
 
