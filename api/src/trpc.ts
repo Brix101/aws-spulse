@@ -10,11 +10,12 @@ export const createContext = ({
   return { req, res, db, userId: "" };
 };
 
-type Context = Awaited<ReturnType<typeof createContext>>;
+type Context = Awaited<ReturnType<typeof createContext>> & {
+  db: typeof db;
+  userId: string;
+};
 
-export const t = initTRPC.context<Context>().create({
-  // transformer: superjson,
-});
+export const t = initTRPC.context<Context>().create({});
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
