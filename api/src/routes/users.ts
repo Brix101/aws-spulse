@@ -9,6 +9,7 @@ import {
   clearAuthCookies,
   sendAuthCookies,
 } from "../utils/auth-token";
+import { omitUserField } from "src/utils/omitUserFields";
 
 export const userRoutes = router({
   register: publicProcedure
@@ -34,7 +35,7 @@ export const userRoutes = router({
 
         sendAuthCookies(ctx.res, newUser);
 
-        return { user: newUser };
+        return { user: omitUserField(newUser) };
       } catch (e: any) {
         if (
           e.message.includes(
@@ -60,19 +61,18 @@ export const userRoutes = router({
       const { user: maybeUser, userId } = await checkTokens(id, rid);
 
       if (maybeUser) {
-        return { user: maybeUser };
+        return { user: omitUserField(maybeUser) };
       }
 
       const user = await ctx.db.query.users.findFirst({
         where: eq(users.id, userId),
       });
 
-      return { user };
+      return { user: user ? omitUserField(user) : null };
     } catch {
       return { user: null };
     }
   }),
-
   login: publicProcedure
     .input(
       z.object({
@@ -108,7 +108,7 @@ export const userRoutes = router({
       }
 
       sendAuthCookies(ctx.res, user);
-      return { user };
+      return { user: omitUserField(user) };
     }),
   logout: publicProcedure.mutation(async ({ ctx }) => {
     clearAuthCookies(ctx.res);

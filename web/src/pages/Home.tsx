@@ -1,9 +1,11 @@
 import "@/assets/css/index.css";
 import { Button } from "@/components/ui/button";
+import { useAuthUser } from "@/provider/auth-context-provider";
 
 import { trpc } from "@/utils/trpc";
 
 function Home() {
+  const { user: authUser } = useAuthUser();
   const utils = trpc.useUtils();
 
   const { data, isLoading, isFetching } = trpc.user.getMe.useQuery();
@@ -21,6 +23,9 @@ function Home() {
     },
   });
 
+  console.log("AAAAAAAAAAAAa");
+
+  console.log(authUser);
   return (
     <div className="h-screen w-screen flex flex-col items-center justify-center">
       {isLoading || isFetching ? (

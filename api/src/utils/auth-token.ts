@@ -83,6 +83,7 @@ export const checkTokens = async (
   const user = await db.query.users.findFirst({
     where: eq(users.id, data.userId),
   });
+
   if (!user || user.refreshTokenVersion !== data.refreshTokenVersion) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
