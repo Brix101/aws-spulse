@@ -2,7 +2,6 @@ import "@/assets/css/index.css";
 import { Button } from "@/components/ui/button";
 
 import { trpc } from "@/utils/trpc";
-import exp from "constants";
 
 function Home() {
   const utils = trpc.useUtils();
