@@ -48,7 +48,7 @@ type UseUserReturn =
   | { isLoaded: true; isSignedIn: false; user: null }
   | { isLoaded: true; isSignedIn: true; user: UserResource };
 
-export const useAuthUser = (): UseUserReturn => {
+export const useUser = (): UseUserReturn => {
   const user = useUserContext();
   if (user === undefined) {
     return { isLoaded: false, isSignedIn: undefined, user: undefined };

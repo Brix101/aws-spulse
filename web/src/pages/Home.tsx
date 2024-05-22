@@ -1,38 +1,29 @@
 import "@/assets/css/index.css";
 import { Button } from "@/components/ui/button";
-import { useAuthUser } from "@/provider/auth-context-provider";
+import { useUser } from "@/provider/auth-context-provider";
 
-import { trpc } from "@/utils/trpc";
+import { clientUtils, trpc } from "@/utils/trpc";
 
 function Home() {
-  const { user: authUser } = useAuthUser();
-  const utils = trpc.useUtils();
+  const { user } = useUser();
 
-  const { data, isLoading, isFetching } = trpc.user.getMe.useQuery();
-
-  const user = data?.user;
   const login = trpc.user.login.useMutation({
     onSuccess: (data) => {
-      utils.user.getMe.setData(undefined, data);
+      clientUtils.user.getMe.setData(undefined, data);
     },
   });
 
   const logout = trpc.user.logout.useMutation({
     onSuccess: () => {
-      utils.user.getMe.invalidate();
+      clientUtils.user.getMe.invalidate();
     },
   });
 
   console.log("AAAAAAAAAAAAa");
 
-  console.log(authUser);
   return (
     <div className="h-screen w-screen flex flex-col items-center justify-center">
-      {isLoading || isFetching ? (
-        <p>Loading</p>
-      ) : (
-        <p>Hello {user?.name ?? "World"}</p>
-      )}
+      <p>Hello {user?.name ?? "World"}</p>
 
       <div>
         {!user ? (
