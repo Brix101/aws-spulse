@@ -1,28 +1,16 @@
-import { clientUtils } from "@/utils/trpc";
-import { useLoaderData, useOutlet } from "react-router-dom";
+import { useOutlet } from "react-router-dom";
 
-import { AuthContextProvider } from "./auth-context-provider";
-import { UserResource } from "@aws-spulse/api";
+import { clientUtils } from "@/utils/trpc";
+import { UserContextProvider } from "./user-context-provider";
 
 export async function authLoader() {
   const data = await clientUtils.user.getMe.ensureData();
 
-  return data as { user: UserResource | null };
+  return data;
 }
 
 export function AuthProvider() {
   const outlet = useOutlet();
 
-  const initialData = useLoaderData() as Awaited<ReturnType<typeof authLoader>>;
-
-  return (
-    <AuthContextProvider
-      initialState={{
-        userId: initialData?.user?.id,
-        user: initialData.user,
-      }}
-    >
-      {outlet}
-    </AuthContextProvider>
-  );
+  return <UserContextProvider>{outlet}</UserContextProvider>;
 }

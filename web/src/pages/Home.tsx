@@ -1,7 +1,7 @@
 import "@/assets/css/index.css";
-import { Button } from "@/components/ui/button";
-import { useUser } from "@/provider/auth-context-provider";
 
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/provider/user-context-provider";
 import { clientUtils, trpc } from "@/utils/trpc";
 
 function Home() {
@@ -19,7 +19,7 @@ function Home() {
     },
   });
 
-  console.log("AAAAAAAAAAAAa");
+  console.log("************************************************");
 
   return (
     <div className="h-screen w-screen flex flex-col items-center justify-center">

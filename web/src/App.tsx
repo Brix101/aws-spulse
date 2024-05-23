@@ -6,7 +6,7 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { authLoader, AuthProvider } from "./provider/auth-provider";
+import { authLoader, AuthProvider } from "@/provider/auth-provider";
 import Home from "./pages/Home";
 
 function App() {

@@ -9,27 +9,25 @@ const [UserContext, useUserContext] = createContextAndHook<
   UserResource | null | undefined
 >("UserContext");
 
-type AuthContextProvider = {
+type UserContextProvider = {
   initialState?: InitialState;
   children: React.ReactNode;
 };
 
-type AuthContextProviderState = {
+type UserContextProviderState = {
   user?: UserResource | null;
 };
 
-export function AuthContextProvider(props: AuthContextProvider) {
+export function UserContextProvider(props: UserContextProvider) {
   const { initialState, children } = props;
   const { data, isLoading } = trpc.user.getMe.useQuery();
 
-  const [state, setState] = React.useState<AuthContextProviderState>({
+  const [state, setState] = React.useState<UserContextProviderState>({
     user: data?.user,
   });
 
   React.useEffect(() => {
-    if (data) {
-      setState({ user: data.user });
-    }
+    setState({ user: data?.user });
     return () => {
       setState({});
     };
