@@ -2,10 +2,10 @@ import * as trpcExpress from "@trpc/server/adapters/express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
-import { createContext, router } from "./trpc";
 import { userRoutes } from "./routes/users";
+import { createContext, createTRPCRouter } from "./trpc";
 
-export const appRouter = router({
+export const appRouter = createTRPCRouter({
   user: userRoutes,
 });
 

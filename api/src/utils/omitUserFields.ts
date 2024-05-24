@@ -1,5 +1,5 @@
-import { UserResource } from "src/api-type";
-import { User } from "src/schema/users";
+import { UserResource } from "..";
+import { User } from "../schema/users";
 
 export const omitUserField = (user: User): UserResource => {
   return {

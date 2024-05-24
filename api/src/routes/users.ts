@@ -2,7 +2,7 @@ import { TRPCError, TRPCRouterRecord } from "@trpc/server";
 import argon2d from "argon2";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { users } from "../schema/users";
+import { User, users } from "../schema/users";
 import { publicProcedure } from "../trpc";
 import {
   checkTokens,
@@ -18,7 +18,7 @@ export const userRoutes = {
         name: z.string().min(3),
         email: z.string().email(),
         password: z.string().min(6),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       try {
@@ -31,15 +31,14 @@ export const userRoutes = {
               passwordHash: await argon2d.hash(input.password),
             })
             .returning()
-        )[0];
+        )[0] as User;
 
         sendAuthCookies(ctx.res, newUser);
-
         return { user: omitUserField(newUser) };
       } catch (e: any) {
         if (
           e.message.includes(
-            'duplicate key value violates unique constraint "users_email_unique"',
+            'duplicate key value violates unique constraint "users_email_unique"'
           )
         ) {
           throw new TRPCError({
@@ -78,7 +77,7 @@ export const userRoutes = {
       z.object({
         email: z.string().email(),
         password: z.string(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.query.users.findFirst({

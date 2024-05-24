@@ -9,6 +9,7 @@ import {
 } from "@trpc/react-query";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { toast } from "sonner";
+import superjson from "superjson";
 
 // infer the types for your router
 export type ReactQueryOptions = inferReactQueryProcedureOptions<AppRouter>;
@@ -25,6 +26,7 @@ export const trpcClient = trpc.createClient({
         (opts.direction === "down" && opts.result instanceof Error),
     }),
     httpBatchLink({
+      transformer: superjson,
       url: "/trpc",
     }),
   ],
@@ -41,14 +43,14 @@ export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {
       toast.error(
-        `An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`,
+        `An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`
       );
     },
   }),
   mutationCache: new MutationCache({
     onError: (error) => {
       toast.error(
-        `An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`,
+        `An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`
       );
     },
   }),

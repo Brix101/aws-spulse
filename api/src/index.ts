@@ -4,9 +4,11 @@ import { app } from "./appRouter";
 import { db } from "./db";
 import { User } from "./schema/users";
 
-
 export type { AppRouter } from "./appRouter";
-export type UserResource = Omit<User, "passwordHash" |"confirmed">
+export type UserResource = Omit<
+  User,
+  "passwordHash" | "confirmed" | "refreshTokenVersion"
+>;
 
 const startServer = async () => {
   console.log("about to migrate postgres");
