@@ -1,6 +1,7 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import superjson from "superjson";
+import { ZodError } from "zod";
 import { db } from "./db";
 import { checkTokens, sendAuthCookies } from "./utils/auth-token";
 
@@ -18,6 +19,13 @@ type Context = Awaited<ReturnType<typeof createContext>> & {
 
 export const t = initTRPC.context<Context>().create({
   transformer: superjson,
+  errorFormatter: ({ shape, error }) => ({
+    ...shape,
+    data: {
+      ...shape.data,
+      zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
+    },
+  }),
 });
 
 export const createTRPCRouter = t.router;

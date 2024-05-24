@@ -3,7 +3,6 @@ import pg from "pg";
 import { env } from "./env.mjs";
 import { users } from "./schema/users";
 
-
 const pool = new pg.Pool({
   host: env.DATABASE_HOST,
   port: env.DATABASE_PORT,
