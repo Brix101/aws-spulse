@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils";
 import { useUser } from "@/provider/user-context-provider";
 import { Link, Outlet } from "react-router-dom";
 import { buttonVariants } from "../ui/button";
-import { UserNav } from "./user-nav";
 
 export function LandingLayout() {
   const { user } = useUser();
@@ -14,13 +13,21 @@ export function LandingLayout() {
           {/* <MainNav className="mx-6" /> */}
           <div className="ml-auto flex items-center space-x-4">
             {user ? (
-              <UserNav user={user} />
+              <Link
+                to={"/dashboard"}
+                className={cn(
+                  buttonVariants({
+                    size: "sm",
+                  })
+                )}
+              >
+                Dashboard
+              </Link>
             ) : (
               <Link
                 to={"/auth/sign-in"}
                 className={cn(
                   buttonVariants({
-                    variant: "outline",
                     size: "sm",
                   })
                 )}
