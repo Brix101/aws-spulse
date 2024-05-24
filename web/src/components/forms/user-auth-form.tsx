@@ -3,7 +3,6 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { RouterInputs, clientUtils, trpc } from "@/utils/trpc";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import {
@@ -39,20 +38,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           const message = zodError.fieldErrors[key]?.[0];
           form.setError(key as any, { message });
         });
-      } else {
-        toast.error(error.message);
       }
     },
   });
 
+  function onSubmit(values: SigInInput) {
+    signIn.mutate(values);
+  }
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit((data) => {
-            signIn.mutate(data);
-          })}
-        >
+        <form onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}>
           <div className="grid gap-2">
             <FormField
               control={form.control}

@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { authLoader, AuthProvider } from "@/provider/auth-provider";
 import { LandingLayout } from "./components/layout/landing-layout";
+import { Toaster } from "./components/ui/sonner";
 import { AboutPage } from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
 import { SignInPage } from "./pages/SignInPage";
@@ -44,6 +45,7 @@ function App() {
   return (
     <>
       <RouterProvider router={browserRouter} />
+      <Toaster richColors closeButton />
     </>
   );
 }

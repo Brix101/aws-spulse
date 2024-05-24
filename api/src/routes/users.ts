@@ -97,8 +97,8 @@ export const userRoutes = {
 
       if (!user) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "user not found",
+          code: "NOT_FOUND",
+          message: "User not found",
         });
       }
 
