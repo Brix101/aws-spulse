@@ -2,16 +2,18 @@
   "name": "@aws-spulse/api",
   "version": "0.1.0",
   "type": "module",
-  "exports":{
-    ".":{
-      "types":"./src/api-type.ts",
-      "default":"./src/index.ts"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
     }
   },
   "main": "index.ts",
   "types": "src/api-type.ts",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
     "studio": "drizzle-kit studio"
