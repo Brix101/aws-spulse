@@ -11,6 +11,22 @@ import {
 } from "../utils/auth-token";
 import { omitUserField } from "../utils/omitUserFields";
 
+export const signInSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+  password: z
+    .string()
+    .min(8, {
+      message: "Password must be at least 8 characters long",
+    })
+    .max(100),
+  // .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/, {
+  //   message:
+  //     "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character",
+  // }),
+});
+
 export const userRoutes = {
   register: publicProcedure
     .input(
@@ -72,13 +88,8 @@ export const userRoutes = {
       return { user: null };
     }
   }),
-  login: publicProcedure
-    .input(
-      z.object({
-        email: z.string().email(),
-        password: z.string(),
-      })
-    )
+  signIn: publicProcedure
+    .input(signInSchema)
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.query.users.findFirst({
         where: eq(users.email, input.email.toString()),
