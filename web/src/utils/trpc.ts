@@ -1,3 +1,5 @@
+import type { AppRouter } from "@aws-spulse/api";
+import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
 import {
   createTRPCQueryUtils,
   createTRPCReact,
@@ -6,8 +8,6 @@ import {
   type inferReactQueryProcedureOptions,
 } from "@trpc/react-query";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
-import type { AppRouter } from "@aws-spulse/api";
-import { QueryClient, QueryCache, MutationCache } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 // infer the types for your router

@@ -1,7 +1,13 @@
 {
   "name": "@aws-spulse/api",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "type": "module",
+  "exports":{
+    ".":{
+      "types":"./src/api-type.ts",
+      "default":"./src/index.ts"
+    }
+  },
   "main": "index.ts",
   "types": "src/api-type.ts",
   "scripts": {
@@ -14,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@t3-oss/env-core": "^0.10.1",
     "@trpc/server": "11.0.0-rc.374",
     "@types/node": "^20.12.12",
     "argon2": "^0.40.1",

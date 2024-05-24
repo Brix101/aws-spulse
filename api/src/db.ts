@@ -1,15 +1,15 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
+import { env } from "./env.mjs";
 import { users } from "./schema/users";
 
-//"postgresql://postgres:postgres@localhost/aws_spulse?schema=public&connection_limit=1&pool_timeout=1",
 
 const pool = new pg.Pool({
-  host: "localhost",
-  port: 5432,
-  user: "postgres",
-  password: "postgres",
-  database: "aws_spulse",
+  host: env.DATABASE_HOST,
+  port: env.DATABASE_PORT,
+  user: env.DATABASE_USER,
+  password: env.DATABASE_PASSWORD,
+  database: env.DATABASE_NAME,
 });
 
 export const db = drizzle(pool, {

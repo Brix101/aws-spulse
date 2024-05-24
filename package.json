@@ -7,13 +7,14 @@
     "web"
   ],
   "scripts": {
-    "dev": "concurrently \"pnpm --filter @aws-spulse/api run dev\" \"pnpm --filter @aws-spulse/web run dev\"",
+    "dev": "dotenv concurrently \"pnpm --filter @aws-spulse/api run dev\" \"pnpm --filter @aws-spulse/web run dev\"",
     "studio": "pnpm --filter @aws-spulse/api run studio"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv-cli": "^7.4.2",
     "prettier": "^3.2.5"
   },
   "devDependencies": {

@@ -1,17 +1,17 @@
-import { TRPCError } from "@trpc/server";
+import { TRPCError, TRPCRouterRecord } from "@trpc/server";
 import argon2d from "argon2";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { users } from "../schema/users";
-import { publicProcedure, router } from "../trpc";
+import { publicProcedure } from "../trpc";
 import {
   checkTokens,
   clearAuthCookies,
   sendAuthCookies,
 } from "../utils/auth-token";
-import { omitUserField } from "src/utils/omitUserFields";
+import { omitUserField } from "../utils/omitUserFields";
 
-export const userRoutes = router({
+export const userRoutes = {
   register: publicProcedure
     .input(
       z.object({
@@ -117,4 +117,4 @@ export const userRoutes = router({
       ok: true,
     };
   }),
-});
+} satisfies TRPCRouterRecord;

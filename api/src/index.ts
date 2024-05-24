@@ -1,15 +1,16 @@
+import { migrate } from "drizzle-orm/node-postgres/migrator";
 import path from "path";
 import { app } from "./appRouter";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { db } from "./db";
-import { fileURLToPath } from "url";
+import { User } from "./schema/users";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+
+export type { AppRouter } from "./appRouter";
+export type UserResource = Omit<User, "passwordHash" |"confirmed">
 
 const startServer = async () => {
   console.log("about to migrate postgres");
-  await migrate(db, { migrationsFolder: path.join(__dirname, "../drizzle") });
+  await migrate(db, { migrationsFolder: path.join(process.cwd(), "drizzle") });
   console.log("postgres migration complete");
 
   const server = app.listen(4000, () => {

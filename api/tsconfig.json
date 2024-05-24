@@ -1,37 +1,36 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "lib": [
-      "dom",
-      "es6",
-      "es2017",
-      "esnext.asynciterable"
-    ],
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "moduleResolution": "node",
-    "removeComments": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+
+    /** Base Options */
     "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "allowJs": true,
     "resolveJsonModule": true,
-    "baseUrl": "."
+    "moduleDetection": "force",
+    "isolatedModules": true,
+
+    /** Keep TSC performant in monorepos */
+    "incremental": true,
+    "disableSourceOfProjectReferenceRedirect": true,
+
+    /** Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "checkJs": true,
+
+    /** Transpile using Bundler (not tsc) */
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+
+    /** Emit types for internal packages to speed up editor performance. */
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "./src/**/*.ts"
-  ]
+  "exclude": ["node_modules",  "dist"]
 }
