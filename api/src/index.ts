@@ -1,5 +1,5 @@
-import { User } from "~/schema/users";
-import { appRouter, startServer } from "~/server";
+import { User } from "./schema/users";
+import { appRouter, startServer } from "./server";
 
 startServer();
 

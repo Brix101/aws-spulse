@@ -5,9 +5,9 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import express from "express";
 import path from "path";
 
-import { db } from "~/db";
-import { userRoutes } from "~/routes/users";
-import { createContext, createTRPCRouter } from "~/trpc";
+import { db } from "./db";
+import { userRoutes } from "./routes/users";
+import { createContext, createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
   user: userRoutes,

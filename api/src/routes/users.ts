@@ -1,16 +1,18 @@
 import { TRPCError, TRPCRouterRecord } from "@trpc/server";
-import argon2d from "argon2";
 import { eq } from "drizzle-orm";
+import { Argon2id } from "oslo/password";
 import { z } from "zod";
 
-import { User, users } from "~/schema/users";
-import { publicProcedure } from "~/trpc";
+import { User, users } from "../schema/users";
+import { publicProcedure } from "../trpc";
 import {
   checkTokens,
   clearAuthCookies,
   sendAuthCookies,
-} from "~/utils/auth-token";
-import { omitUserField } from "~/utils/omitUserFields";
+} from "../utils/auth-token";
+import { omitUserField } from "../utils/omitUserFields";
+
+const argon2id = new Argon2id();
 
 export const signInSchema = z.object({
   email: z.string().email({
@@ -59,7 +61,7 @@ export const userRoutes = {
             .values({
               name: input.name,
               email: input.email.toLowerCase(),
-              passwordHash: await argon2d.hash(input.password),
+              passwordHash: await argon2id.hash(input.password),
             })
             .returning()
         )[0] as User;
@@ -118,7 +120,7 @@ export const userRoutes = {
       }
 
       try {
-        const valid = await argon2d.verify(user.passwordHash, input.password);
+        const valid = await argon2id.verify(user.passwordHash, input.password);
         if (!valid) {
           throw new TRPCError({
             code: "UNAUTHORIZED",

@@ -29,10 +29,10 @@
     /** Emit types for internal packages to speed up editor performance. */
     "noEmit": true,
 
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./src/*"]
-    }
+    "baseUrl": "."
+    // "paths": {
+    //   "~/*": ["./src/*"]
+    // }
   },
   "exclude": ["node_modules", "dist"]
 }

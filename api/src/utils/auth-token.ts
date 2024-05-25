@@ -2,9 +2,10 @@ import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
+import { HMAC } from "oslo/crypto";
 
-import { db } from "~/db";
-import { User, users } from "~/schema/users";
+import { db } from "../db";
+import { User, users } from "../schema/users";
 
 export type RefreshTokenPayload = {
   userId: string;
@@ -14,6 +15,10 @@ export type RefreshTokenPayload = {
 export type AccessTokenPayload = {
   userId: string;
 };
+
+const secret = await new HMAC("SHA-256").generateKey();
+
+console.log(secret);
 
 const createAuthTokens = (
   user: User
