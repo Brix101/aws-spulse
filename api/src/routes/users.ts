@@ -2,8 +2,9 @@ import { TRPCError, TRPCRouterRecord } from "@trpc/server";
 import argon2d from "argon2";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { User, users } from "../schema/users";
-import { publicProcedure } from "../trpc";
+
+import { User, users } from "~/schema/users";
+import { publicProcedure } from "~/trpc";
 import {
   checkTokens,
   clearAuthCookies,

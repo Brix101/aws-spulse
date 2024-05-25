@@ -1,9 +1,10 @@
-import jsonwebtoken from "jsonwebtoken";
-import { Response } from "express";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
-import { User, users } from "../schema/users";
-import { db } from "../db";
+import { Response } from "express";
+import jsonwebtoken from "jsonwebtoken";
+
+import { db } from "~/db";
+import { User, users } from "~/schema/users";
 
 export type RefreshTokenPayload = {
   userId: string;
@@ -15,21 +16,21 @@ export type AccessTokenPayload = {
 };
 
 const createAuthTokens = (
-  user: User,
+  user: User
 ): { refreshToken: string; accessToken: string } => {
   const refreshToken = jsonwebtoken.sign(
     { userId: user.id, refreshTokenVersion: user.refreshTokenVersion },
     "process.env.REFRESH_TOKEN_SECRET",
     {
       expiresIn: "30d",
-    },
+    }
   );
   const accessToken = jsonwebtoken.sign(
     { userId: user.id },
     "process.env.ACCESS_TOKEN_SECRET",
     {
       expiresIn: "15min",
-    },
+    }
   );
 
   return { refreshToken, accessToken };
@@ -56,7 +57,7 @@ export const clearAuthCookies = (res: Response) => {
 
 export const checkTokens = async (
   accessToken: string,
-  refreshToken: string,
+  refreshToken: string
 ) => {
   try {
     const data = <AccessTokenPayload>(

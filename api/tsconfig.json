@@ -28,6 +28,11 @@
 
     /** Emit types for internal packages to speed up editor performance. */
     "noEmit": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
-  "exclude": ["node_modules",  "dist"]
+  "exclude": ["node_modules", "dist"]
 }

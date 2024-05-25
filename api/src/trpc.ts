@@ -2,8 +2,9 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { db } from "./db";
-import { checkTokens, sendAuthCookies } from "./utils/auth-token";
+
+import { db } from "~/db";
+import { checkTokens, sendAuthCookies } from "~/utils/auth-token";
 
 export const createContext = ({
   req,
