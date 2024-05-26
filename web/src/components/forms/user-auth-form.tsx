@@ -17,7 +17,7 @@ import { Input, Input as SigInInput } from "../ui/input";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-type SigInInput = RouterInputs["user"]["signIn"];
+type SigInInput = RouterInputs["auth"]["signIn"];
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const form = useForm<SigInInput>({
@@ -27,9 +27,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   });
 
-  const signIn = trpc.user.signIn.useMutation({
+  const signIn = trpc.auth.signIn.useMutation({
     onSuccess: (data) => {
-      clientUtils.user.getMe.setData(undefined, data);
+      clientUtils.auth.getMe.setData(undefined, data);
     },
     onError: (error) => {
       const zodError = error.data?.zodError;

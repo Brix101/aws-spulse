@@ -18,9 +18,9 @@ interface UserNavProps {
 }
 
 export function UserNav({ user }: UserNavProps) {
-  const logout = trpc.user.logout.useMutation({
+  const logout = trpc.auth.logout.useMutation({
     onSuccess: () => {
-      clientUtils.user.getMe.invalidate();
+      clientUtils.auth.getMe.invalidate();
     },
   });
 

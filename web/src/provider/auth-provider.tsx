@@ -4,7 +4,7 @@ import { clientUtils } from "@/utils/trpc";
 import { UserContextProvider } from "./user-context-provider";
 
 export async function authLoader() {
-  const data = await clientUtils.user.getMe.ensureData();
+  const data = await clientUtils.auth.getMe.ensureData();
 
   return data;
 }

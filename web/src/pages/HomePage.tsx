@@ -8,14 +8,18 @@ function HomePage() {
   const { user } = useUser();
 
   const utils = trpc.useUtils();
-  const register = trpc.user.register.useMutation();
-  const signIn = trpc.user.signIn.useMutation({
+  const register = trpc.auth.register.useMutation({
     onSuccess: (data) => {
-      utils.user.getMe.setData(undefined, data);
+      utils.auth.getMe.setData(undefined, data);
     },
   });
-  const logout = trpc.user.logout.useMutation({
-    onSuccess: () => utils.user.getMe.invalidate(),
+  const signIn = trpc.auth.signIn.useMutation({
+    onSuccess: (data) => {
+      utils.auth.getMe.setData(undefined, data);
+    },
+  });
+  const logout = trpc.auth.logout.useMutation({
+    onSuccess: () => utils.auth.getMe.invalidate(),
   });
 
   return (

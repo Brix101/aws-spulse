@@ -20,7 +20,7 @@ type UserContextProviderState = {
 
 export function UserContextProvider(props: UserContextProvider) {
   const { initialState, children } = props;
-  const { data, isLoading } = trpc.user.getMe.useQuery();
+  const { data, isLoading } = trpc.auth.getMe.useQuery();
 
   const [state, setState] = React.useState<UserContextProviderState>({
     user: data?.user,

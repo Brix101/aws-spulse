@@ -10,7 +10,7 @@ import { userRoutes } from "./routes/users";
 import { createContext, createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
-  user: userRoutes,
+  auth: userRoutes,
 });
 
 const app = express();
@@ -25,7 +25,7 @@ app.use(
   trpcExpress.createExpressMiddleware({
     router: appRouter,
     createContext,
-  })
+  }),
 );
 
 export const startServer = async () => {
