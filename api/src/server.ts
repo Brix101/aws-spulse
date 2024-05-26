@@ -6,11 +6,11 @@ import express from "express";
 import path from "path";
 
 import { db } from "./db";
-import { userRoutes } from "./routes/users";
+import { authRoutes } from "./routes/auth";
 import { createContext, createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
-  auth: userRoutes,
+  auth: authRoutes,
 });
 
 const app = express();
