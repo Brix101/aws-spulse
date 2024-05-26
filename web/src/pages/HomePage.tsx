@@ -1,4 +1,5 @@
 import "@/assets/css/index.css";
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
 import { useUser } from "@/provider/user-context-provider";
@@ -36,17 +37,28 @@ function HomePage() {
       >
         register
       </Button>
-      <Button
-        onClick={() =>
-          signIn.mutate({
-            email: "john.doe@example.com",
-            password: "P4$sword",
-          })
-        }
-      >
-        Sign in
-      </Button>
-      <Button onClick={() => logout.mutate()}>Logout</Button>
+      {user ? (
+        <Button
+          variant={"outline"}
+          onClick={() => logout.mutate()}
+          disabled={logout.isPending}
+        >
+          {logout.isPending && <Icons.spinner className="animate-spin" />}Logout
+        </Button>
+      ) : (
+        <Button
+          onClick={() =>
+            signIn.mutate({
+              email: "john.doe@example.com",
+              password: "P4$sword",
+            })
+          }
+          disabled={signIn.isPending}
+        >
+          {signIn.isPending && <Icons.spinner className="animate-spin" />}
+          Sign in
+        </Button>
+      )}{" "}
     </div>
   );
 }
