@@ -14,10 +14,10 @@ export const env = createEnv({
     DATABASE_PORT: z.coerce.number(),
     DATABASE_USER: z.string(),
     DATABASE_PASSWORD: z.string(),
-    REFRESH_PUBLIC_KEY: z.string(),
-    REFRESH_PRIVATE_KEY: z.string(),
-    ACCESS_PUBLIC_KEY: z.string(),
-    ACCESS_PRIVATE_KEY: z.string(),
+    REFRESH_PUBLIC_KEY: z.string().transform((s) => Buffer.from(s, "base64")),
+    REFRESH_PRIVATE_KEY: z.string().transform((s) => Buffer.from(s, "base64")),
+    ACCESS_PUBLIC_KEY: z.string().transform((s) => Buffer.from(s, "base64")),
+    ACCESS_PRIVATE_KEY: z.string().transform((s) => Buffer.from(s, "base64")),
   },
 
   /*

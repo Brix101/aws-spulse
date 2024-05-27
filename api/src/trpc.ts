@@ -43,7 +43,7 @@ export const protectProcedure = t.procedure.use(async (opts) => {
 
   ctx.userId = userId;
   if (user) {
-    sendAuthCookies(ctx.res, user);
+    await sendAuthCookies(ctx.res, user);
   }
 
   return opts.next(opts);
