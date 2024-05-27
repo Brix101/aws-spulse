@@ -16,7 +16,7 @@ type PayloadClaims = Record<any, any>;
 export async function signJwt(
   keyName: keyof PrivateKeys,
   payloadClaims: PayloadClaims,
-  options?: OptionsType
+  options?: OptionsType,
 ) {
   const privateKey = Buffer.from(env[keyName], "base64");
 
@@ -38,7 +38,7 @@ type PublicKeys = {
 
 export async function verifyJwt<T extends DefaultPayload>(
   keyName: keyof PublicKeys,
-  token: string
+  token: string,
 ) {
   const publicKey = Buffer.from(env[keyName], "base64");
 

@@ -48,9 +48,9 @@ export const authRoutes = {
             {
               message:
                 "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character",
-            }
+            },
           ),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
@@ -75,7 +75,7 @@ export const authRoutes = {
       } catch (e: any) {
         if (
           e.message.includes(
-            'duplicate key value violates unique constraint "users_email_unique"'
+            'duplicate key value violates unique constraint "users_email_unique"',
           )
         ) {
           throw new TRPCError({
@@ -93,7 +93,7 @@ export const authRoutes = {
   getMe: publicProcedure.query(async ({ ctx }) => {
     try {
       const { user: maybeUser, userId } = await checkAuthCookies(
-        ctx.req.cookies
+        ctx.req.cookies,
       );
 
       if (maybeUser) {

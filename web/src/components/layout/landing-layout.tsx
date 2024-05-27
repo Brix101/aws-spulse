@@ -18,7 +18,7 @@ export function LandingLayout() {
                 className={cn(
                   buttonVariants({
                     size: "sm",
-                  })
+                  }),
                 )}
               >
                 Dashboard
@@ -29,7 +29,7 @@ export function LandingLayout() {
                 className={cn(
                   buttonVariants({
                     size: "sm",
-                  })
+                  }),
                 )}
               >
                 Sign in

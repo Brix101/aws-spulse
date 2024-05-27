@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "dev": "dotenv concurrently \"pnpm --filter @aws-spulse/api run dev\" \"pnpm --filter @aws-spulse/web run dev\"",
+    "format": "concurrently \"pnpm --filter @aws-spulse/api run format\" \"pnpm --filter @aws-spulse/web run format\"",
     "studio": "pnpm --filter @aws-spulse/api run studio"
   },
   "keywords": [],

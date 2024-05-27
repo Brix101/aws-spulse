@@ -14,6 +14,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "format": "prettier --write \"**/*.ts\" --cache",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
     "studio": "drizzle-kit studio"

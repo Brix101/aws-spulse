@@ -43,14 +43,14 @@ export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {
       toast.error(
-        `An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`
+        `An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     },
   }),
   mutationCache: new MutationCache({
     onError: (error) => {
       toast.error(
-        `An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`
+        `An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     },
   }),
