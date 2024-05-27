@@ -11,8 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { UserResource } from "@/types/auth";
 import { clientUtils, trpc } from "@/utils/trpc";
-import { UserResource } from "@aws-spulse/api";
 
 interface UserNavProps {
   user: UserResource;

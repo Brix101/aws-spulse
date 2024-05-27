@@ -1,5 +1,4 @@
-import { Resources, InitialState } from "@/types/auth";
-import { UserResource } from "@aws-spulse/api";
+import { InitialState, Resources, UserResource } from "@/types/auth";
 
 export const deriveState = (
   authLoaded: boolean,

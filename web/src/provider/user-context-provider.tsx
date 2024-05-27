@@ -1,8 +1,7 @@
-import { InitialState } from "@/types/auth";
+import { InitialState, UserResource } from "@/types/auth";
 import { createContextAndHook } from "@/utils/createContextAndHook";
 import { deriveState } from "@/utils/deriveState";
 import { trpc } from "@/utils/trpc";
-import { UserResource } from "@aws-spulse/api";
 import React from "react";
 
 const [UserContext, useUserContext] = createContextAndHook<
