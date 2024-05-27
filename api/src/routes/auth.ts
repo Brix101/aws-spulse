@@ -49,9 +49,9 @@ export const authRoutes = {
             {
               message:
                 "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character",
-            },
+            }
           ),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       try {
@@ -66,12 +66,12 @@ export const authRoutes = {
             .returning()
         )[0] as User;
 
-        sendAuthCookies(ctx.res, newUser);
+        await sendAuthCookies(ctx.res, newUser);
         return { user: omitUserField(newUser) };
       } catch (e: any) {
         if (
           e.message.includes(
-            'duplicate key value violates unique constraint "users_email_unique"',
+            'duplicate key value violates unique constraint "users_email_unique"'
           )
         ) {
           throw new TRPCError({
@@ -134,7 +134,7 @@ export const authRoutes = {
         });
       }
 
-      sendAuthCookies(ctx.res, user);
+      await sendAuthCookies(ctx.res, user);
       return { user: omitUserField(user) };
     }),
   logout: publicProcedure.mutation(async ({ ctx }) => {

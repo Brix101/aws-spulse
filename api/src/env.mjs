@@ -13,7 +13,11 @@ export const env = createEnv({
     DATABASE_NAME: z.string(),
     DATABASE_PORT: z.coerce.number(),
     DATABASE_USER: z.string(),
-    DATABASE_PASSWORD: z.string()
+    DATABASE_PASSWORD: z.string(),
+    REFRESH_PUBLIC_KEY: z.string(),
+    REFRESH_PRIVATE_KEY: z.string(),
+    ACCESS_PUBLIC_KEY: z.string(),
+    ACCESS_PRIVATE_KEY: z.string(),
   },
 
   /*
@@ -27,6 +31,10 @@ export const env = createEnv({
     DATABASE_NAME: process.env.DATABASE_NAME,
     DATABASE_PORT: process.env.DATABASE_PORT,
     DATABASE_USER: process.env.DATABASE_USER,
-    DATABASE_PASSWORD: process.env.DATABASE_PASSWORD
+    DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
+    REFRESH_PUBLIC_KEY: process.env.REFRESH_PUBLIC_KEY,
+    REFRESH_PRIVATE_KEY: process.env.REFRESH_PRIVATE_KEY,
+    ACCESS_PUBLIC_KEY: process.env.ACCESS_PUBLIC_KEY,
+    ACCESS_PRIVATE_KEY: process.env.ACCESS_PRIVATE_KEY,
   },
 });
