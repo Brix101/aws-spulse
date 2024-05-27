@@ -4,11 +4,10 @@ import { Response } from "express";
 
 import { TimeSpan } from "oslo";
 import { serializeCookie } from "oslo/cookie";
-import { createJWT, validateJWT } from "oslo/jwt";
 import { COOKIE_KEY } from "src/constant";
-import { env } from "src/env.mjs";
 import { db } from "../db";
 import { User, users } from "../schema/users";
+import { signJwt, verifyJwt } from "./jwt-util";
 
 export type RefreshTokenPayload = {
   sub: string;
@@ -22,30 +21,18 @@ export type AccessTokenPayload = {
 const createAuthTokens = async (
   user: User
 ): Promise<{ refreshToken: string; accessToken: string }> => {
-  const refreshToken = await createJWT(
-    "ES256",
-    env.REFRESH_PRIVATE_KEY,
-    { email: user.email },
-    {
-      expiresIn: new TimeSpan(30, "d"),
-      // notBefore: createDate(refreshTime),
-      issuer: "example.com",
-      subject: user.id,
-      // audiences,
-      includeIssuedTimestamp: true,
-    }
+  const refreshToken = await signJwt(
+    "REFRESH_PRIVATE_KEY",
+    { email: user.email, refreshTokenVersion: user.refreshTokenVersion },
+    { expiresIn: new TimeSpan(30, "d"), subject: user.id }
   );
 
-  const accessToken = await createJWT(
-    "ES256",
-    env.ACCESS_PRIVATE_KEY,
+  const accessToken = await signJwt(
+    "ACCESS_PRIVATE_KEY",
     {},
     {
       expiresIn: new TimeSpan(15, "m"),
-      issuer: "example.com",
       subject: user.id,
-      // audiences,
-      includeIssuedTimestamp: true,
     }
   );
 
@@ -73,49 +60,48 @@ export const sendAuthCookies = async (res: Response, user: User) => {
 };
 
 export const clearAuthCookies = (res: Response) => {
-  res.cookie(COOKIE_KEY.ACCESS, "", { ...cookieOpts, maxAge: -1 });
-  res.cookie(COOKIE_KEY.REFRESH, "", { ...cookieOpts, maxAge: -1 });
+  const clearCookieOptions = { ...cookieOpts, maxAge: -1 };
+
+  res.cookie(COOKIE_KEY.ACCESS, "", clearCookieOptions);
+  res.cookie(COOKIE_KEY.REFRESH, "", clearCookieOptions);
 };
 
 export const checkTokens = async (
   accessToken: string,
   refreshToken: string
 ) => {
-  try {
-    const jwt = await validateJWT("ES256", env.ACCESS_PUBLIC_KEY, accessToken);
-    const payload = jwt.payload as AccessTokenPayload;
+  const accessJwt = await verifyJwt("ACCESS_PUBLIC_KEY", accessToken);
 
+  if (accessJwt) {
+    const accessPayload = accessJwt.payload as AccessTokenPayload;
     return {
-      userId: jwt.subject ?? payload.sub,
+      userId: accessJwt.subject ?? accessPayload.sub,
     };
-  } catch {}
+  }
 
   if (!refreshToken) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
-  let data: RefreshTokenPayload = { sub: "", refreshTokenVersion: 0 };
-  try {
-    const jwt = await validateJWT(
-      "ES256",
-      env.REFRESH_PUBLIC_KEY,
-      refreshToken
-    );
-    data = jwt.payload as RefreshTokenPayload;
-  } catch {
+  const refreshJwt = await verifyJwt("REFRESH_PUBLIC_KEY", refreshToken);
+  if (!refreshJwt) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
+  const refreshPayload = refreshJwt.payload as RefreshTokenPayload;
   const user = await db.query.users.findFirst({
-    where: eq(users.id, data.sub),
+    where: eq(users.id, refreshPayload.sub),
   });
 
-  if (!user || user.refreshTokenVersion !== data.refreshTokenVersion) {
+  if (
+    !user ||
+    user.refreshTokenVersion !== refreshPayload.refreshTokenVersion
+  ) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
   return {
-    userId: data.sub,
+    userId: refreshPayload.sub,
     user,
   };
 };

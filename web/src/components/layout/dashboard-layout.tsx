@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useUser } from "@/provider/user-context-provider";
 import {
   Archive,
   ArchiveX,
@@ -9,7 +10,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet } from "react-router-dom";
 import { Button, buttonVariants } from "../ui/button";
 import {
   Tooltip,
@@ -65,7 +66,12 @@ const links: NavLinkItem[] = [
 ];
 
 export function DashboardLayout() {
+  const { user } = useUser();
   const [isCollapsed, setCollapse] = useState(true);
+
+  if (!user) {
+    return <Navigate to={"/"} />;
+  }
 
   return (
     <TooltipProvider delayDuration={0}>
