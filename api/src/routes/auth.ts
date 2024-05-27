@@ -66,6 +66,7 @@ export const authRoutes = {
               id: users.id,
               email: users.email,
               name: users.name,
+              refreshTokenVersion: users.refreshTokenVersion,
             })
         )[0];
 
@@ -123,6 +124,7 @@ export const authRoutes = {
           name: true,
           email: true,
           passwordHash: true,
+          refreshTokenVersion: true,
         },
       });
 
