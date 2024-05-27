@@ -3,14 +3,13 @@ import { eq } from "drizzle-orm";
 import { Argon2id } from "oslo/password";
 import { z } from "zod";
 
-import { User, users } from "../schema/users";
+import { users } from "../schema/users";
 import { publicProcedure } from "../trpc";
 import {
   checkAuthCookies,
   clearAuthCookies,
   sendAuthCookies,
 } from "../utils/auth-token";
-import { omitUserField } from "../utils/omitUserFields";
 
 const argon2id = new Argon2id();
 
@@ -63,11 +62,15 @@ export const authRoutes = {
               email: input.email.toLowerCase(),
               passwordHash: await argon2id.hash(input.password),
             })
-            .returning()
-        )[0] as User;
+            .returning({
+              id: users.id,
+              email: users.email,
+              name: users.name,
+            })
+        )[0];
 
-        await sendAuthCookies(ctx.res, newUser);
-        return { user: omitUserField(newUser) };
+        await sendAuthCookies(ctx.res, newUser ?? {});
+        return { user: newUser ?? null };
       } catch (e: any) {
         if (
           e.message.includes(
@@ -93,14 +96,19 @@ export const authRoutes = {
       );
 
       if (maybeUser) {
-        return { user: omitUserField(maybeUser) };
+        return { user: maybeUser };
       }
 
       const user = await ctx.db.query.users.findFirst({
         where: eq(users.id, userId),
+        columns: {
+          id: true,
+          email: true,
+          name: true,
+        },
       });
 
-      return { user: user ? omitUserField(user) : null };
+      return { user: user ?? null };
     } catch {
       return { user: null };
     }
@@ -108,19 +116,26 @@ export const authRoutes = {
   signIn: publicProcedure
     .input(signInSchema)
     .mutation(async ({ ctx, input }) => {
-      const user = await ctx.db.query.users.findFirst({
+      const dUser = await ctx.db.query.users.findFirst({
         where: eq(users.email, input.email.toString()),
+        columns: {
+          id: true,
+          name: true,
+          email: true,
+          passwordHash: true,
+        },
       });
 
-      if (!user) {
+      if (!dUser) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "User not found",
         });
       }
+      const { passwordHash, ...user } = dUser;
 
       try {
-        const valid = await argon2id.verify(user.passwordHash, input.password);
+        const valid = await argon2id.verify(passwordHash, input.password);
         if (!valid) {
           throw new TRPCError({
             code: "UNAUTHORIZED",
@@ -135,7 +150,7 @@ export const authRoutes = {
       }
 
       await sendAuthCookies(ctx.res, user);
-      return { user: omitUserField(user) };
+      return { user };
     }),
   logout: publicProcedure.mutation(async ({ ctx }) => {
     clearAuthCookies(ctx.res);

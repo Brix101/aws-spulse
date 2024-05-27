@@ -14,7 +14,7 @@ export type RefreshTokenPayload = {
   refreshTokenVersion?: number;
 };
 
-const signAuthTokens = async (user: User) => {
+const signAuthTokens = async (user: Partial<User>) => {
   const refreshToken = await signJwt(
     "REFRESH_PRIVATE_KEY",
     {
@@ -48,7 +48,7 @@ const cookieOpts = {
   // sameSite: "lax",
 };
 
-export const sendAuthCookies = async (res: Response, user: User) => {
+export const sendAuthCookies = async (res: Response, user: Partial<User>) => {
   const { accessToken, refreshToken } = await signAuthTokens(user);
 
   const serializes = [
@@ -100,14 +100,23 @@ export const checkAuthCookies = async (cookieRecord: Record<string, any>) => {
 
   const refreshPayload = refreshJwt.payload;
   const userSub = refreshJwt.subject ?? refreshPayload.sub;
-  const user = await db.query.users.findFirst({
+  const dUser = await db.query.users.findFirst({
     where: eq(users.id, userSub),
+    columns: {
+      id: true,
+      email: true,
+      name: true,
+      refreshTokenVersion: true,
+    },
   });
 
-  if (
-    !user ||
-    user.refreshTokenVersion !== refreshPayload.refreshTokenVersion
-  ) {
+  if (!dUser) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  const { refreshTokenVersion, ...user } = dUser;
+
+  if (refreshTokenVersion !== refreshPayload.refreshTokenVersion) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
