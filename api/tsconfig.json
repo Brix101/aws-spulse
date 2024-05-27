@@ -27,9 +27,9 @@
     "moduleResolution": "Bundler",
 
     /** Emit types for internal packages to speed up editor performance. */
-    "noEmit": true,
+    "noEmit": true
 
-    "baseUrl": "."
+    // "baseUrl": ".",
     // "paths": {
     //   "~/*": ["./src/*"]
     // }

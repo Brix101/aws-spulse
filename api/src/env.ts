@@ -8,12 +8,18 @@ export const env = createEnv({
    * Will throw if you access these variables on the client.
    */
   server: {
+    NODE_ENV: z
+      .enum(["development", "test", "production"])
+      .default("development"),
+    PORT: z.coerce.number().default(4000),
+
     // DATABASE_URL: z.string().url(),
     DATABASE_HOST: z.string(),
     DATABASE_NAME: z.string(),
     DATABASE_PORT: z.coerce.number(),
     DATABASE_USER: z.string(),
     DATABASE_PASSWORD: z.string(),
+
     REFRESH_PUBLIC_KEY: z.string(),
     REFRESH_PRIVATE_KEY: z.string(),
     ACCESS_PUBLIC_KEY: z.string(),
@@ -27,11 +33,15 @@ export const env = createEnv({
    * 💡 You'll get type errors if not all variables from `server` & `client` are included here.
    */
   runtimeEnv: {
+    NODE_ENV: process.env.NODE_ENV,
+    PORT: process.env.PORT,
+
     DATABASE_HOST: process.env.DATABASE_HOST,
     DATABASE_NAME: process.env.DATABASE_NAME,
     DATABASE_PORT: process.env.DATABASE_PORT,
     DATABASE_USER: process.env.DATABASE_USER,
     DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
+
     REFRESH_PUBLIC_KEY: process.env.REFRESH_PUBLIC_KEY,
     REFRESH_PRIVATE_KEY: process.env.REFRESH_PRIVATE_KEY,
     ACCESS_PUBLIC_KEY: process.env.ACCESS_PUBLIC_KEY,

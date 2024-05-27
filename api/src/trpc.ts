@@ -1,11 +1,10 @@
-import { TRPCError, initTRPC } from "@trpc/server";
+import { initTRPC } from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { COOKIE_KEY } from "./constant";
 import { db } from "./db";
-import { checkTokens, sendAuthCookies } from "./utils/auth-token";
+import { checkAuthCookies, sendAuthCookies } from "./utils/auth-token";
 
 export const createContext = ({
   req,
@@ -35,16 +34,7 @@ export const publicProcedure = t.procedure;
 export const protectProcedure = t.procedure.use(async (opts) => {
   const { ctx } = opts;
 
-  const {
-    [COOKIE_KEY.ACCESS]: accessCookie,
-    [COOKIE_KEY.REFRESH]: refreshCookie,
-  } = ctx.req.cookies;
-
-  if (!accessCookie && !refreshCookie) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
-
-  const { userId, user } = await checkTokens(accessCookie, refreshCookie);
+  const { userId, user } = await checkAuthCookies(ctx.req.cookies);
 
   ctx.userId = userId;
   if (user) {

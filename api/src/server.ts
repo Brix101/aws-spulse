@@ -6,6 +6,7 @@ import express from "express";
 import path from "path";
 
 import { db } from "./db";
+import { env } from "./env";
 import { authRoutes } from "./routes/auth";
 import { userRoutes } from "./routes/user";
 import { createContext, createTRPCRouter } from "./trpc";
@@ -35,8 +36,8 @@ export const startServer = async () => {
   await migrate(db, { migrationsFolder: path.join(process.cwd(), "drizzle") });
   console.log("postgres migration complete");
 
-  const server = app.listen(4000, () => {
-    console.log("server started on http://localhost:4000/trpc");
+  const server = app.listen(env.PORT, () => {
+    console.log(`server started on http://localhost:${env.PORT}/trpc`);
   });
 
   process.on("SIGTERM", () => {

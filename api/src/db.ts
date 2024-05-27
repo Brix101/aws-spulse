@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
 
-import { env } from "./env.mjs";
+import { env } from "./env.js";
 import { users } from "./schema/users";
 
 const pool = new pg.Pool({
@@ -13,7 +13,7 @@ const pool = new pg.Pool({
 });
 
 export const db = drizzle(pool, {
-  logger: true,
+  logger: env.NODE_ENV !== "production",
   schema: {
     users,
   },

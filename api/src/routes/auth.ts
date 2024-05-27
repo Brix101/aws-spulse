@@ -6,7 +6,7 @@ import { z } from "zod";
 import { User, users } from "../schema/users";
 import { publicProcedure } from "../trpc";
 import {
-  checkTokens,
+  checkAuthCookies,
   clearAuthCookies,
   sendAuthCookies,
 } from "../utils/auth-token";
@@ -87,10 +87,10 @@ export const authRoutes = {
       }
     }),
   getMe: publicProcedure.query(async ({ ctx }) => {
-    const { id, rid } = ctx.req.cookies;
-
     try {
-      const { user: maybeUser, userId } = await checkTokens(id, rid);
+      const { user: maybeUser, userId } = await checkAuthCookies(
+        ctx.req.cookies
+      );
 
       if (maybeUser) {
         return { user: omitUserField(maybeUser) };

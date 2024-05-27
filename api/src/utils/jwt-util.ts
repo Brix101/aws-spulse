@@ -1,5 +1,5 @@
 import { createJWT, validateJWT } from "oslo/jwt";
-import { env } from "../env.mjs";
+import { env } from "../env.js";
 
 type CreateJwtFunction = typeof createJWT;
 type OptionsType = Parameters<CreateJwtFunction>[3];
@@ -10,6 +10,7 @@ type PrivateKeys = {
     : never]: (typeof env)[K];
 };
 
+type DefaultPayload = { sub: string };
 type PayloadClaims = Record<any, any>;
 
 export async function signJwt(
@@ -17,8 +18,7 @@ export async function signJwt(
   payloadClaims: PayloadClaims,
   options?: OptionsType
 ) {
-  const keyStr = env[keyName];
-  const privateKey = Buffer.from(keyStr, "base64");
+  const privateKey = Buffer.from(env[keyName], "base64");
 
   const token = await createJWT("ES256", privateKey, payloadClaims, {
     issuer: "example.com",
@@ -36,14 +36,19 @@ type PublicKeys = {
     : never]: (typeof env)[K];
 };
 
-export async function verifyJwt(keyName: keyof PublicKeys, token: string) {
-  const keyStr = env[keyName];
-  const publicKey = Buffer.from(keyStr, "base64");
+export async function verifyJwt<T extends DefaultPayload>(
+  keyName: keyof PublicKeys,
+  token: string
+) {
+  const publicKey = Buffer.from(env[keyName], "base64");
 
   try {
     const jwt = await validateJWT("ES256", publicKey, token);
 
-    return jwt;
+    return {
+      ...jwt,
+      payload: jwt.payload as T,
+    };
   } catch {
     return null;
   }
