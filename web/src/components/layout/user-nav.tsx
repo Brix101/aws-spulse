@@ -10,14 +10,16 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import { clientUtils, trpc } from "@/utils/trpc";
 import { UserResource } from "@aws-spulse/api";
 
 interface UserNavProps {
   user: UserResource;
+  isCollapsed?: boolean;
 }
 
-export function UserNav({ user }: UserNavProps) {
+export function UserNav({ user, isCollapsed }: UserNavProps) {
   const logout = trpc.auth.logout.useMutation({
     onSuccess: () => {
       clientUtils.auth.getMe.invalidate();
@@ -29,23 +31,43 @@ export function UserNav({ user }: UserNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button
+          variant="ghost"
+          className={cn(
+            "relative flex h-8 w-full justify-center ",
+            isCollapsed ? "w-8 rounded-full" : "flex justify-start",
+          )}
+        >
           <Avatar className="h-8 w-8">
             <AvatarImage src="/avatars/01.png" alt="@shadcn" />
             <AvatarFallback>{icon}</AvatarFallback>
           </Avatar>
+          {!isCollapsed && (
+            <div className="ml-2 text-start">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">{user?.name}</p>
+                <p className="text-muted-foreground text-xs leading-none">
+                  {user?.email}
+                </p>
+              </div>
+            </div>
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.name}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user?.email}
-            </p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        {isCollapsed && (
+          <>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">{user?.name}</p>
+                <p className="text-muted-foreground text-xs leading-none">
+                  {user?.email}
+                </p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuGroup>
           <DropdownMenuItem>
             Profile

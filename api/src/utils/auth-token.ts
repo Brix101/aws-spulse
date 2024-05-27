@@ -24,7 +24,7 @@ const signAuthTokens = async (user: Partial<User>) => {
     {
       expiresIn: new TimeSpan(30, "d"),
       subject: user.id,
-    }
+    },
   );
 
   const accessToken = await signJwt(
@@ -33,7 +33,7 @@ const signAuthTokens = async (user: Partial<User>) => {
     {
       expiresIn: new TimeSpan(15, "m"),
       subject: user.id,
-    }
+    },
   );
 
   return { refreshToken, accessToken };
@@ -91,7 +91,7 @@ export const checkAuthCookies = async (cookieRecord: Record<string, any>) => {
 
   const refreshJwt = await verifyJwt<RefreshTokenPayload>(
     "REFRESH_PUBLIC_KEY",
-    refreshToken
+    refreshToken,
   );
 
   if (!refreshJwt) {
