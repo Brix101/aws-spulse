@@ -1,4 +1,4 @@
-import { RouterOutputs } from "@/utils/trpc";
+import { RouterOutputs } from "@aws-spulse/api";
 
 export type UserResource = NonNullable<RouterOutputs["auth"]["getMe"]["user"]>;
 

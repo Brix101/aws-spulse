@@ -7,16 +7,11 @@ import path from "path";
 
 import { db } from "./db";
 import { env } from "./env";
-import { authRoutes } from "./routes/auth";
-import { userRoutes } from "./routes/user";
-import { createContext, createTRPCRouter } from "./trpc";
-
-export const appRouter = createTRPCRouter({
-  auth: authRoutes,
-  user: userRoutes,
-});
+import { appRouter } from "./routes";
+import { createContext } from "./trpc";
 
 const app = express();
+
 app.use(
   "/trpc",
   cors({
